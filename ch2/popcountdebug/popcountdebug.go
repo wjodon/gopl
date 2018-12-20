@@ -34,7 +34,7 @@ func LoopPopCount(x uint64) int {
 		seg := byte(x >> (i * 8))
 		b := pc[seg]
 		sum += b
-		fmt.Printf("%d) %08b = %d: += %d = %d\n", i, seg, seg, b, sum)
+		fmt.Printf("%d) %08b = %[2]d: += %d = %d\n", i, seg, b, sum)
 	}
 	fmt.Println()
 	return int(sum)
@@ -70,7 +70,7 @@ func ClearPopCount(x uint64) int {
 }
 
 func printIndex(x int) {
-	fmt.Printf("%d, %b, %d, %d, %d, %d\n", x, x, PopCount(uint64(x)),
+	fmt.Printf("%d, %[1]b, %d, %d, %d, %d\n", x, PopCount(uint64(x)),
 		LoopPopCount(uint64(x)),
 		ShiftPopCount(uint64(x)),
 		ClearPopCount(uint64(x)))
@@ -78,14 +78,6 @@ func printIndex(x int) {
 }
 
 func main() {
-	/*for i := range pc {
-		fmt.Printf("i: %d i(bin):%b - val: %b val(int) %d\n", i, i, pc[i], int(pc[i]))
-	}
-
-	for i := 0; i <= 255; i++ {
-		fmt.Println(i, "PopCount:", PopCount(uint64(i)))
-	}
-	*/
 	printIndex(0)
 	printIndex(1)
 	printIndex(45)
