@@ -4,7 +4,10 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io"
+	"log"
 	"math"
+	"net/http"
 )
 
 const (
@@ -23,11 +26,22 @@ var v = flag.Bool("v", false, "display min/max values of x, y, and z")
 var sin30, cos30 = math.Sin(angle), math.Cos(angle) //sin(30 deg), cos(30 deg)
 
 func main() {
+	http.HandleFunc("/", handler)
+	log.Fatal(http.ListenAndServe("localhost:8000", nil))
+}
+
+func handler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "image/svg+xml")
+
+	surface(w)
+}
+
+func surface(w io.Writer) {
 	var maxX, maxY, maxZ, minX, minY, minZ, maxSx, maxSy, minSx, minSy float64
 
 	flag.Parse()
 	if !(*s || *v) {
-		fmt.Printf("<svg xmlns='http://www.w3.org/2000/svg' "+
+		fmt.Fprintf(w, "<svg xmlns='http://www.w3.org/2000/svg' "+
 			"style='stroke: grey; fill: white; stroke-width: 0.7' "+
 			"width='%d' height='%d'>", width, height)
 	}
@@ -70,18 +84,18 @@ func main() {
 					} else {
 						color = "#ff0000"
 					}
-					fmt.Printf("<polygon points='%g,%g,%g,%g,%g,%g,%g,%g' fill='%s'/><!-- %g -->\n",
+					fmt.Fprintf(w, "<polygon points='%g,%g,%g,%g,%g,%g,%g,%g' fill='%s'/><!-- %g -->\n",
 						asx, asy, bsx, bsy, csx, csy, dsx, dsy, color, lowZ)
 				}
 			}
 		}
 	}
 	if *s {
-		fmt.Println("SCALED:: Min x:", minSx, "y:", minSy, "- Max x:", maxSx, "y:", maxSy)
+		fmt.Fprintln(w, "SCALED:: Min x:", minSx, "y:", minSy, "- Max x:", maxSx, "y:", maxSy)
 	} else if *v {
-		fmt.Println("Min x:", minX, "y:", minY, "z:", minZ, " - Max x:", maxX, "y:", maxY, "z:", maxZ)
+		fmt.Fprintln(w, "Min x:", minX, "y:", minY, "z:", minZ, " - Max x:", maxX, "y:", maxY, "z:", maxZ)
 	} else {
-		fmt.Println("</svg>")
+		fmt.Fprintln(w, "</svg>")
 	}
 
 }

@@ -13,7 +13,7 @@ const (
 	xyrange       = 10.0                // axis ranges (-xyrange..+xyrange)
 	xyscale       = width / 2 / xyrange // pixels per x or y unit
 	zscale        = height * 0.0025     // pixels per z unit
-	zcolor        = 35
+	zcolor        = 49
 	angle         = math.Pi / 6 // angle of x, y axes (=30 deg)
 )
 

@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	tc "***REMOVED***/gopl/ch2/tempconv.1"
+	tc "github.com/wjodon/gopl/ch2/tempconv.1"
 )
 
 func main() {
